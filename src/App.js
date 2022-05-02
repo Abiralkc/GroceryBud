@@ -21,6 +21,18 @@ function App() {
     }
     else if(name && isEditing){
       //deal with edit
+      setList(
+        list.map((item)=>{
+          if (item.id ===editID){
+            return{...item,title:name}
+          }
+          return item
+        })
+      )
+      setName('');
+      setEditId(null);
+      setIsEditing(false);
+      showAlert(true,'success','value changed')
     }
     else{
       //show alert
@@ -41,6 +53,12 @@ function App() {
   const removeItem = (id) => {
     showAlert(true,'danger','item removed')
     setList(list.filter((item)=> item.id !== id))
+  }
+  const editItem = (id) =>{
+    const specification = list.find((item)=> item.id ===id);
+    setIsEditing(true);
+    setEditId(id);
+    setName(specification.title)
   }
   return (
     <section className='section-center'>
@@ -65,7 +83,7 @@ function App() {
       {list.length > 0 && (
 
           <div className='grocery-container'>
-          <List items={list} removeItem={removeItem}/>
+          <List items={list} removeItem={removeItem} editItem={editItem}/>
           <button className='clear-btn' onClick={clearList}>Clear Items</button>
           </div>
       )}
